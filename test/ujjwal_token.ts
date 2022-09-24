@@ -109,6 +109,8 @@ describe("Ujjwal Token", () => {
             expect(allowance).equal(50);
         })
 
+
+
         it('transfer from user3 to user4', async () => {
             const tx = token.connect(signer3).transferFrom(signer2.address, signer4.address, 10);
             await expect(tx).to.emit(token, 'Transfer').withArgs(
@@ -118,7 +120,25 @@ describe("Ujjwal Token", () => {
             expect(allowance).equal(40);
         });
 
+        it('increase allowance', async () => {
+            const tx = token.connect(signer2).increaseAllowance(signer3.address, 20);
+            await expect(tx).emit(token, 'Approval').withArgs(
+                signer2.address, signer3.address, 60
+            )
 
+            const allowance = await token.allowance(signer2.address, signer3.address);
+            expect(allowance).equal(60);
+        })
+
+        it('decrease allowance', async () => {
+            const tx = token.connect(signer2).decreaseAllowance(signer3.address, 20);
+            await expect(tx).emit(token, 'Approval').withArgs(
+                signer2.address, signer3.address, 40
+            )
+
+            const allowance = await token.allowance(signer2.address, signer3.address);
+            expect(allowance).equal(40);
+        })
 
     });
 
@@ -141,7 +161,7 @@ describe("Ujjwal Token", () => {
 
         it('transfer from user3 to user4 more amount that allowance', async () => {
             const allowance = await token.allowance(signer2.address, signer3.address);
-            expect(allowance).equal(40);
+            expect(allowance).to.be.greaterThan(0);
             const tx = token.connect(signer3).transferFrom(signer2.address, signer4.address, allowance + 1);
             await expect(tx).to.revertedWith('ERC20: insufficient allowance');
         });
