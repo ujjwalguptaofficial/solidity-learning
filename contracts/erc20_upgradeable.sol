@@ -8,10 +8,10 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 contract UjjwalToken is Initializable, OwnableUpgradeable, ERC20Upgradeable {
     function initialize(
-        string memory name,
-        string memory symbol,
-        uint mintAmount
-    ) public initializer {
+        string calldata name,
+        string calldata symbol,
+        uint256 mintAmount
+    ) external initializer {
         __ERC20_init(name, symbol);
         __Ownable_init();
         _mint(_msgSender(), mintAmount);

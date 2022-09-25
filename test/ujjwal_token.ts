@@ -136,7 +136,7 @@ describe("Ujjwal Token", () => {
                 signer2.address, signer3.address, 40
             )
 
-            const allowance = await token.allowance(signer2.address, signer3.address);
+            const allowance = await token.allowance(signer2.address, signer3.address)
             expect(allowance).equal(40);
         })
 
